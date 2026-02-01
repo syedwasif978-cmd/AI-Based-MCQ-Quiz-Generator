@@ -1,0 +1,101 @@
+/* Theme: Cream + Dark Green accent (aesthetic, professional) */
+:root{
+  --bg:#F4F2EE; /* slightly darker cream background */
+  --card:#FFFFFF; /* clean card background */
+  --muted:#6b6f68; /* subtle grey-green */
+  --accent:#0b5f3b; /* deep, aesthetic dark green */
+  --accent-2:#7FC29D; /* soft mint highlight */
+  --text:#122a21; /* dark greenish text for readability */
+  --glass: rgba(18,42,33,0.04); /* subtle frosted */
+  --success:#0f9d58;
+  --danger:#d9534f;
+  --radius:12px;
+  --card-border: rgba(18,42,33,0.06);
+  --muted-2: rgba(18,42,33,0.08);
+} 
+
+/* Topbar */
+.topbar{backdrop-filter:saturate(1.0) blur(6px);position:sticky;top:0;z-index:40;border-bottom:1px solid transparent;background:linear-gradient(180deg, rgba(255,255,255,0.6), rgba(255,255,255,0.5));transition:box-shadow .25s ease, backdrop-filter .25s ease;will-change:box-shadow;box-shadow:none}
+.topbar.scrolled{box-shadow:0 8px 24px rgba(11,95,59,0.08);border-bottom-color:var(--muted-2);backdrop-filter:saturate(1.1) blur(8px)}
+.topbar-inner{display:flex;align-items:center;justify-content:space-between}
+.brand{display:flex;align-items:center;gap:12px;text-decoration:none;color:var(--text)}
+.brand-logo{filter:drop-shadow(0 6px 18px rgba(11,95,59,0.08))}
+.brand-text{font-weight:700;color:var(--accent)}
+.nav{display:flex;gap:12px;align-items:center}
+.nav-link{color:var(--muted);text-decoration:none;padding:10px 14px;border-radius:10px;transition:all .18s ease}
+.nav-link:hover{color:var(--accent);background:linear-gradient(90deg, rgba(127,194,157,0.12), rgba(11,95,59,0.04));transform:translateY(-2px)}
+
+/* Ensure cards have subtle border */
+.card{background:var(--card);padding:18px;border-radius:12px;border:1px solid var(--card-border);}
+.card h3{margin:0 0 10px 0} 
+
+*{box-sizing:border-box}
+html,body{height:100%}
+body.theme-root{background:var(--bg);color:var(--text);font-family:Inter, system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial;line-height:1.5;margin:0}
+.container{max-width:1100px;margin:0 auto;padding:24px}
+
+/* Top bar */
+.topbar{backdrop-filter:saturate(1.0) blur(6px);position:sticky;top:0;z-index:40;border-bottom:1px solid var(--muted-2);background:linear-gradient(180deg, rgba(255,255,255,0.6), rgba(255,255,255,0.5));}
+.topbar-inner{display:flex;align-items:center;justify-content:space-between}
+.brand{display:flex;align-items:center;gap:12px;text-decoration:none;color:var(--text)}
+.brand-logo{filter:drop-shadow(0 6px 18px rgba(11,95,59,0.08))}
+.brand-text{font-weight:700;color:var(--accent)}
+.nav{display:flex;gap:12px;align-items:center}
+.nav-link{color:var(--muted);text-decoration:none;padding:10px 14px;border-radius:10px;transition:all .18s ease}
+.nav-link:hover{color:var(--accent);background:linear-gradient(90deg, rgba(127,194,157,0.12), rgba(11,95,59,0.04));transform:translateY(-2px)}
+
+/* Main layout */
+.main-content{padding-top:36px;padding-bottom:80px}
+
+.hero{display:flex;gap:36px;align-items:center;justify-content:space-between;margin-bottom:28px}
+.hero-card{background:var(--card);padding:28px;border-radius:var(--radius);box-shadow:0 12px 40px rgba(18,42,33,0.06);flex:1}
+.hero h1{font-family:Merriweather, serif;font-weight:700;margin:0 0 6px 0;font-size:28px}
+.hero p{color:var(--muted);margin:0 0 12px 0}
+.cta-row{display:flex;gap:12px}
+.btn{background:linear-gradient(90deg,var(--accent), var(--accent-2));border:none;color:#fff;padding:10px 16px;border-radius:10px;font-weight:600;cursor:pointer;transition:transform .12s ease, box-shadow .12s ease}
+.btn:hover{transform:translateY(-3px);box-shadow:0 12px 30px rgba(11,95,59,0.12)}
+.btn.secondary{background:transparent;border:1px solid var(--muted-2);color:var(--text)}
+
+/* Grid */
+.grid{display:grid;grid-template-columns:1fr 360px;gap:20px}
+.card{background:var(--card);padding:18px;border-radius:12px;border:1px solid rgba(255,255,255,0.02);}
+.card h3{margin:0 0 10px 0}
+
+/* Forms */
+.form-row{display:flex;gap:12px;flex-wrap:wrap}
+.form-field{display:flex;flex-direction:column;flex:1;min-width:180px}
+label{font-size:14px;color:var(--muted);margin-bottom:6px}
+input[type=text], input[type=email], input[type=password], input[type=number], select, textarea{background:var(--glass);border:1px solid var(--card-border);color:var(--text);padding:10px;border-radius:8px;outline:none;transition:box-shadow .12s ease, transform .08s ease}
+input:focus, select:focus, textarea:focus{box-shadow:0 12px 30px rgba(11,95,59,0.06);transform:translateY(-2px);border-color:var(--accent)}
+.small{font-size:13px;color:var(--muted)}
+.form-actions{display:flex;gap:12px;align-items:center;margin-top:12px}
+
+/* Preview */
+.preview-links a{color:var(--accent-2);text-decoration:none}
+
+/* Table/list of recent quizzes */
+.recent-list{display:flex;flex-direction:column;gap:10px}
+.recent-item{display:flex;justify-content:space-between;align-items:center;padding:10px;border-radius:8px;background:linear-gradient(180deg, rgba(255,255,255,0.01), transparent);border:1px solid rgba(255,255,255,0.02)}
+.recent-item .meta{color:var(--muted);font-size:13px}
+
+/* Footer */
+.site-footer{padding:20px 0;border-top:1px solid rgba(255,255,255,0.02);color:var(--muted);margin-top:40px}
+.footer-links a{color:var(--muted);text-decoration:none;margin-left:10px}
+
+/* Animations */
+.fade-in{animation:fadeIn .45s ease both}
+@keyframes fadeIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+
+/* Mobile */
+@media (max-width:880px){
+  .grid{grid-template-columns:1fr}
+  .topbar-inner{flex-direction:column;gap:12px;align-items:flex-start}
+}
+
+/* Mini utility classes */
+.text-muted{color:var(--muted)}
+.small-note{font-size:13px;color:var(--muted)}
+
+/* Spinner */
+.spinner{width:18px;height:18px;border-radius:50%;border:3px solid rgba(255,255,255,0.08);border-top-color:var(--accent);animation:spin .9s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}

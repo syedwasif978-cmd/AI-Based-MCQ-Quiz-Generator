@@ -1,12 +1,14 @@
-<!doctype html>
-<html>
-  <head><title>Quiz Preview</title></head>
-  <body>
-    <h1>Quiz Generated</h1>
-    <p>Your quiz was generated successfully. Use the links below to download the files.</p>
-    <ul>
-      <li><a href="/pdf/questions/{{ quiz_id }}">Download Question Paper (PDF)</a></li>
-      <li><a href="/pdf/answers/{{ quiz_id }}">Download Answer Key (PDF)</a></li>
-    </ul>
-  </body>
-</html>
+{% extends 'base.html' %}
+
+{% block title %}Quiz Generated - AI MCQ Generator{% endblock %}
+
+{% block content %}
+<div class="card">
+  <h3>Quiz Generated</h3>
+  <p class="small-note">Your quiz was generated successfully. Use the links below to download the files. Keep your answer key secure.</p>
+  <div class="preview-links" style="margin-top:12px">
+    <a class="btn" href="/pdf/questions/{{ quiz_id }}">Download Question Paper (PDF)</a>
+    <a class="btn secondary" href="/pdf/answers/{{ quiz_id }}">Download Answer Key (PDF)</a>
+  </div>
+</div>
+{% endblock %}

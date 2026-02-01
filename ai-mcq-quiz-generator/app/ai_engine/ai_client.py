@@ -6,32 +6,70 @@ from ..ai_engine.prompt_templates import MASTER_PROMPT
 
 # Ensure environment variables from .env are loaded when this module is imported directly
 load_dotenv()
-OPENAI_API_KEY = os.getenv('OPENAI_API_KEY')
-OPENAI_MODEL = os.getenv('OPENAI_MODEL', 'gpt-3.5-turbo')
-# Hugging Face settings (prefer HF if key present)
-HUGGINGFACE_API_KEY = os.getenv('HUGGINGFACE_API_KEY')
-HUGGINGFACE_MODEL = os.getenv('HUGGINGFACE_MODEL', 'google/flan-t5-large')
+GEMINI_API_KEY = os.getenv('GEMINI_API_KEY')
+GEMINI_MODEL = os.getenv('GEMINI_MODEL')  # optional, e.g. 'models/gemini-2.5-pro'
 
+
+
+def _attempt_load_json(candidate: str):
+    """Try to parse JSON from a candidate string. Attempt a small set of tolerant cleanup steps on failure."""
+    try:
+        return json.loads(candidate)
+    except Exception:
+        # Try to fix common issues: trailing commas before ] or }, and smart quotes
+        try:
+            cleaned = candidate
+            cleaned = re.sub(r",\s*([\}\]])", r"\1", cleaned)  # remove trailing commas
+            cleaned = cleaned.replace('“', '"').replace('”', '"').replace("`", '"')
+            # Try to load again
+            return json.loads(cleaned)
+        except Exception:
+            return None
 
 
 def _extract_json_from_text(text: str):
-    # Try to find a JSON object in the text using a simple regex
-    m = re.search(r"{\s*\"questions\"[\s\S]*\}$", text.strip())
-    if m:
-        try:
-            return json.loads(m.group(0))
-        except Exception:
-            pass
-    # Fallback: try to load entire text as JSON
-    try:
-        return json.loads(text)
-    except Exception:
+    """Extract a JSON object from free-form text returned by the model.
+
+    Strategy:
+    - If explicit markers <<<JSON>>> ... <<<END_JSON>>> are present, prefer them.
+    - Otherwise, search for the largest JSON-like block containing the key "questions" using a regex.
+    - As a last resort, take the substring from the first '{' to the last '}' and try to parse/clean it.
+    - Return dict on success or None if parsing failed.
+    """
+    if not text or not text.strip():
         return None
+
+    # 1) Markers
+    m = re.search(r"<<<JSON>>>([\s\S]*?)<<<END_JSON>>>", text, re.IGNORECASE)
+    if m:
+        candidate = m.group(1).strip()
+        j = _attempt_load_json(candidate)
+        if j is not None:
+            return j
+
+    # 2) Look for a JSON object that contains the "questions" key
+    m = re.search(r"(\{[\s\S]*\"questions\"[\s\S]*\})", text)
+    if m:
+        candidate = m.group(1).strip()
+        j = _attempt_load_json(candidate)
+        if j is not None:
+            return j
+
+    # 3) Fallback: try from first '{' to last '}'
+    first = text.find('{')
+    last = text.rfind('}')
+    if first != -1 and last != -1 and last > first:
+        candidate = text[first:last+1]
+        j = _attempt_load_json(candidate)
+        if j is not None:
+            return j
+
+    return None
 
 
 def _local_dummy(subject, topics, num, difficulty):
     """Richer deterministic generator that uses topics and produces substantive, exam-style questions.
-    This is used as a reliable fallback when the OpenAI API is not available or fails to return valid JSON."""
+    This is used as a reliable fallback when the Gemini API is not available or fails to return valid JSON."""
     questions = []
     answers = []
     topic_list = [t.strip() for t in (topics or '').split(',') if t.strip()]
@@ -72,80 +110,179 @@ def _local_dummy(subject, topics, num, difficulty):
     return {'questions': questions, 'answers': answers}
 
 
-def generate_mcqs(subject, num, difficulty, topics=None, max_retries=2):
-    """Generate MCQs using OpenAI if available; otherwise fallback to a local generator.
-    Ensures uniqueness of questions and that the provided topics are represented."""
+def generate_mcqs(subject, num, difficulty, topics=None, max_retries=3):
+    """Generate MCQs using Google Gemini if API key is available; otherwise fallback to a local generator.
+    Ensures uniqueness of questions and that the provided topics are represented.
+
+    This implementation tolerates free-form model output by extracting JSON via regex and
+    cleaning common JSON problems. If parsing fails, the model will be asked to reply with
+    ONLY valid JSON and retried up to `max_retries` times."""
+    
     # Use local generator if API key not set
-    if not OPENAI_API_KEY:
-        print("[ai_client] OPENAI_API_KEY not set - using local deterministic generator")
+    if not GEMINI_API_KEY:
+        print("[ai_client] GEMINI_API_KEY not set - using local deterministic generator")
         return _local_dummy(subject, topics, num, difficulty)
 
     # Build prompt
     prompt = MASTER_PROMPT.format(subject=subject, topics=(topics or ''), num=num, difficulty=difficulty)
 
-    # Prefer Hugging Face if API key set
-    if HUGGINGFACE_API_KEY:
-        try:
-            import requests
-            print(f"[ai_client] Attempting Hugging Face generation using model '{HUGGINGFACE_MODEL}'")
-            headers = {"Authorization": f"Bearer {HUGGINGFACE_API_KEY}", "Content-Type": "application/json"}
-            payload = {"inputs": prompt, "parameters": {"max_new_tokens": 800}, "options": {"wait_for_model": True}}
-            # Use the new Router endpoint (recommended by Hugging Face)
-            hf_url = f"https://router.huggingface.co/models/{HUGGINGFACE_MODEL}"
-            resp = requests.post(hf_url, headers=headers, json=payload, timeout=60)
-            if resp.status_code != 200:
-                # Try to surface HF errors
-                msg = ''
-                try:
-                    msg = resp.json()
-                except Exception:
-                    msg = resp.text
-                print(f"[ai_client] Hugging Face API error {resp.status_code}: {msg}")
-                # If router returns 404 or model not found, try the api-inference endpoint as a fallback
-                if resp.status_code == 404:
-                    try:
-                        fallback_url = f"https://api-inference.huggingface.co/models/{HUGGINGFACE_MODEL}"
-                        print(f"[ai_client] Router returned 404; trying inference endpoint {fallback_url} as fallback")
-                        resp2 = requests.post(fallback_url, headers=headers, json=payload, timeout=60)
-                        if resp2.status_code == 200:
-                            resp = resp2
-                        else:
-                            msg2 = ''
-                            try:
-                                msg2 = resp2.json()
-                            except Exception:
-                                msg2 = resp2.text
-                            print(f"[ai_client] Inference endpoint error {resp2.status_code}: {msg2}")
-                            raise Exception(f"HuggingFace API returned status {resp2.status_code} on fallback")
-                    except Exception:
-                        raise Exception(f"HuggingFace API returned status {resp.status_code}")
-                else:
-                    raise Exception(f"HuggingFace API returned status {resp.status_code}")
+    try:
+        import google.generativeai as genai
+        print("[ai_client] Attempting Gemini generation")
 
-            # HF inference may return a JSON with 'generated_text' or a list; handle both
+        genai.configure(api_key=GEMINI_API_KEY)
+        # Auto-detect a model that supports 'generateContent' if not explicitly set
+        chosen_model = GEMINI_MODEL
+        if not chosen_model:
             try:
-                body = resp.json()
-            except Exception:
-                body = resp.text
+                models_iter = genai.list_models()
+                for m in models_iter:
+                    try:
+                        methods = getattr(m, 'supported_generation_methods', None)
+                        if methods and any('generate' in str(x).lower() for x in methods):
+                            chosen_model = getattr(m, 'name', None) or getattr(m, 'display_name', None)
+                            break
+                    except Exception:
+                        continue
+            except Exception as e:
+                print(f"[ai_client] Warning: could not list Gemini models: {e}")
 
-            # extract text content
-            text = ''
-            if isinstance(body, dict) and 'generated_text' in body:
-                text = body['generated_text']
-            elif isinstance(body, list) and len(body) and isinstance(body[0], dict) and 'generated_text' in body[0]:
-                text = body[0]['generated_text']
-            elif isinstance(body, str):
-                text = body
-            else:
-                # Some models return plain text in body as string
-                text = str(body)
+        if not chosen_model:
+            print("[ai_client] No Gemini model found that supports generation; falling back to local generator")
+            return _local_dummy(subject, topics, num, difficulty)
 
-            j = _extract_json_from_text(text)
-            if j:
-                print("[ai_client] Received valid JSON from Hugging Face")
-                questions = j.get('questions', [])
-                answers = j.get('answers', [])
-                # deduplicate
+        print(f"[ai_client] Using Gemini model: {chosen_model}")
+        model = genai.GenerativeModel(chosen_model)
+
+        def _extract_candidate_block(text):
+            # Prefer marker enclosed block
+            m = re.search(r"<<<JSON>>>([\s\S]*?)<<<END_JSON>>>", text, re.IGNORECASE)
+            if m:
+                return m.group(1).strip()
+            # Otherwise, grab from first '{' to last '}'
+            first = text.find('{')
+            last = text.rfind('}')
+            if first != -1 and last != -1 and last > first:
+                return text[first:last+1]
+            return None
+
+        def _attempt_generation_with_repair(model, base_prompt, retries):
+            j = None
+            for attempt in range(retries + 1):
+                response = model.generate_content(base_prompt, generation_config=genai.types.GenerationConfig(max_output_tokens=4000, temperature=0.0))
+                text = response.text if response else ""
+                # Save raw response and meta for debugging
+                try:
+                    from ..utils.helpers import ensure_dir
+                    import datetime
+                    now = datetime.datetime.utcnow().strftime('%Y%m%d_%H%M%S')
+                    raw_path = f"generated_pdfs/logs/gemini_raw_{now}.txt"
+                    meta_path = f"generated_pdfs/logs/gemini_meta_{now}.txt"
+                    ensure_dir(raw_path)
+                    with open(raw_path, 'w', encoding='utf-8') as f:
+                        f.write(text)
+                    with open(meta_path, 'w', encoding='utf-8') as f:
+                        f.write(repr(response))
+                    print(f"[ai_client] Saved raw Gemini response to {raw_path} and meta to {meta_path}")
+                except Exception as e:
+                    print(f"[ai_client] Failed to save raw response: {e}")
+
+                j = _extract_json_from_text(text)
+                if j is not None:
+                    return j
+
+                # Attempt a JSON repair if we can find a candidate JSON-like block
+                candidate = _extract_candidate_block(text)
+                if candidate:
+                    repair_prompt = (
+                        "I could not parse the JSON from your previous message. "
+                        "Please FIX and RETURN ONLY the valid JSON between the markers <<<JSON>>> and <<<END_JSON>>> with no extra text. "
+                        "If you cannot, return exactly {\"error\": \"UNABLE_TO_PROVIDE_JSON\"}.\n\n"
+                        "Candidate JSON:\n" + candidate
+                    )
+                    response2 = model.generate_content(repair_prompt, generation_config=genai.types.GenerationConfig(max_output_tokens=4000, temperature=0.0))
+                    text2 = response2.text if response2 else ""
+                    # Save repair attempt
+                    try:
+                        from ..utils.helpers import ensure_dir
+                        import datetime
+                        now = datetime.datetime.utcnow().strftime('%Y%m%d_%H%M%S')
+                        raw_path = f"generated_pdfs/logs/gemini_raw_{now}.txt"
+                        meta_path = f"generated_pdfs/logs/gemini_meta_{now}.txt"
+                        ensure_dir(raw_path)
+                        with open(raw_path, 'w', encoding='utf-8') as f:
+                            f.write(text2)
+                        with open(meta_path, 'w', encoding='utf-8') as f:
+                            f.write(repr(response2))
+                        print(f"[ai_client] Saved repair attempt raw Gemini response to {raw_path} and meta to {meta_path}")
+                    except Exception as e:
+                        print(f"[ai_client] Failed to save repair raw response: {e}")
+
+                    j = _extract_json_from_text(text2)
+                    if j is not None:
+                        return j
+                # else continue to next attempt
+            return None
+
+        # Primary generation attempts on chosen model with repair
+        j = _attempt_generation_with_repair(model, prompt, max_retries)
+
+        # If still no JSON, try a couple of alternative generation-capable models
+        if j is None:
+            try:
+                alt_tried = 0
+                models_iter = genai.list_models()
+                for m in models_iter:
+                    try:
+                        name = getattr(m, 'name', None) or getattr(m, 'display_name', None)
+                        if not name or name == chosen_model:
+                            continue
+                        methods = getattr(m, 'supported_generation_methods', None)
+                        if not methods or not any('generate' in str(x).lower() for x in methods):
+                            continue
+                        print(f"[ai_client] Trying alternate Gemini model: {name}")
+                        alt_model = genai.GenerativeModel(name)
+                        j = _attempt_generation_with_repair(alt_model, prompt, max(1, max_retries - 1))
+                        alt_tried += 1
+                        if j is not None:
+                            print(f"[ai_client] Alternate model {name} returned valid JSON")
+                            chosen_model = name
+                            model = alt_model
+                            break
+                        if alt_tried >= 2:
+                            break
+                    except Exception:
+                        continue
+            except Exception as e:
+                print(f"[ai_client] Warning: could not list alternative Gemini models: {e}")
+
+        if j is None:
+            print("[ai_client] Gemini did not return valid JSON after retries and alternate models; falling back to local generator")
+            return _local_dummy(subject, topics, num, difficulty)
+
+        print("[ai_client] Received valid JSON from Gemini")
+        # Basic validation
+        questions = j.get('questions', [])
+        answers = j.get('answers', [])
+
+        # Deduplicate by question text
+        seen = set()
+        uniq_q = []
+        for q in questions:
+            key = q.get('q','').strip().lower()
+            if key in seen:
+                continue
+            seen.add(key)
+            uniq_q.append(q)
+
+        # If insufficient unique questions, try asking for more once
+        if len(uniq_q) < int(num):
+            print(f"[ai_client] Received {len(uniq_q)} unique questions (<{num}); asking model to provide more")
+            more_prompt = prompt + f"\n\nPlease provide {int(num)} unique questions in the exact same JSON format. You previously provided {len(uniq_q)} questions."
+            j2 = _attempt_generation_with_repair(model, more_prompt, 1)
+            if j2:
+                questions = j2.get('questions', [])
+                answers = j2.get('answers', [])
                 seen = set()
                 uniq_q = []
                 for q in questions:
@@ -155,72 +292,17 @@ def generate_mcqs(subject, num, difficulty, topics=None, max_retries=2):
                     seen.add(key)
                     uniq_q.append(q)
 
-                if len(uniq_q) >= int(num):
-                    uniq_q = uniq_q[:int(num)]
-                    id_map = {q['id']: q for q in uniq_q if 'id' in q}
-                    filtered_answers = [a for a in answers if a.get('id') in id_map]
-                    return {'questions': uniq_q, 'answers': filtered_answers}
-                else:
-                    print(f"[ai_client] Hugging Face returned {len(uniq_q)} unique questions (<{num}).")
-            else:
-                print("[ai_client] Hugging Face response did not contain valid JSON; falling back to other providers or local generator.")
-        except Exception as e:
-            print(f"[ai_client] Error during Hugging Face generation: {e}; falling back to other providers/local generator")
+        # Trim/format results to requested number
+        if len(uniq_q) >= int(num):
+            uniq_q = uniq_q[:int(num)]
+            # Align answers by id
+            id_map = {q['id']: q for q in uniq_q if 'id' in q}
+            filtered_answers = [a for a in answers if a.get('id') in id_map]
+            return {'questions': uniq_q, 'answers': filtered_answers}
 
-    try:
-        # Lazy import to avoid errors when openai isn't installed
-        from openai import OpenAI
-        client = OpenAI(api_key=OPENAI_API_KEY)
-        messages = [{"role": "user", "content": prompt}]
-        print(f"[ai_client] Attempting OpenAI generation using model '{OPENAI_MODEL}'")
-        for attempt in range(max_retries + 1):
-            resp = client.chat.completions.create(model=OPENAI_MODEL, messages=messages, max_tokens=1500)
-            text = resp.choices[0].message.content
-            j = _extract_json_from_text(text)
-            if not j:
-                # Try another attempt asking for strict JSON
-                messages.append({"role": "assistant", "content": "Output was not valid JSON. Please respond with valid JSON only as specified."})
-                continue
-
-            print("[ai_client] Received valid JSON from OpenAI")
-            # Basic validation
-            questions = j.get('questions', [])
-            answers = j.get('answers', [])
-
-            # Deduplicate by question text
-            seen = set()
-            uniq_q = []
-            for q in questions:
-                key = q.get('q','').strip().lower()
-                if key in seen:
-                    continue
-                seen.add(key)
-                uniq_q.append(q)
-
-            if len(uniq_q) < int(num) and attempt < max_retries:
-                # Ask for more unique questions
-                messages.append({"role":"user","content": f"You returned {len(uniq_q)} unique questions; please provide additional {int(num)-len(uniq_q)} unique questions in the same JSON format."})
-                continue
-
-            # Trim/format results to requested number
-            if len(uniq_q) >= int(num):
-                uniq_q = uniq_q[:int(num)]
-                # Align answers by id
-                id_map = {q['id']: q for q in uniq_q if 'id' in q}
-                filtered_answers = [a for a in answers if a.get('id') in id_map]
-                return {'questions': uniq_q, 'answers': filtered_answers}
-
-            # If not successful, fall back to local dummy
-            print("[ai_client] OpenAI did not return enough unique questions, falling back to local generator")
-            break
 
     except Exception as e:
-        # Show a helpful hint for quota/billing errors
-        s = str(e)
-        if 'insufficient_quota' in s or 'quota' in s or '429' in s:
-            print("[ai_client] OpenAI returned an insufficient_quota/429 error. Consider switching to a cheaper model via OPENAI_MODEL (e.g., 'gpt-3.5-turbo') or checking your billing plan.")
-        print(f"[ai_client] Error during OpenAI generation: {e}; falling back to local generator")
-        # If any error occurs (network, API, parsing), fall back to deterministic local generator
+        print(f"[ai_client] Error during Gemini generation: {e}; falling back to local generator")
         return _local_dummy(subject, topics, num, difficulty)
 
     print("[ai_client] Using local deterministic generator as final fallback")

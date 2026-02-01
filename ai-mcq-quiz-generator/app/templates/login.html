@@ -1,12 +1,27 @@
-<!doctype html>
-<html>
-  <head><title>Login</title></head>
-  <body>
-    <h1>Professor Login</h1>
-    <form method="post" action="/auth/login">
-      Email: <input name="email" type="email" /> <br />
-      Password: <input name="password" type="password" /> <br />
-      <button type="submit">Login</button>
-    </form>
-  </body>
-</html>
+{% extends 'base.html' %}
+
+{% block title %}Login - AI MCQ Generator{% endblock %}
+
+{% block content %}
+<div class="card" style="max-width:520px;margin:0 auto">
+  <h3>Professor Sign in</h3>
+  <form method="post" action="/auth/login">
+    <div class="form-row">
+      <div class="form-field">
+        <label for="email">Email</label>
+        <input id="email" name="email" type="email" required />
+      </div>
+    </div>
+    <div class="form-row" style="margin-top:12px">
+      <div class="form-field">
+        <label for="password">Password</label>
+        <input id="password" name="password" type="password" required />
+      </div>
+    </div>
+    <div class="form-actions">
+      <button class="btn" type="submit">Sign in</button>
+      <a class="btn secondary" href="/auth/register">Register</a>
+    </div>
+  </form>
+</div>
+{% endblock %}

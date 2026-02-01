@@ -45,6 +45,11 @@ def create_app():
         except Exception:
             return ('<h1>AI MCQ Quiz Generator</h1><p>Use the API endpoints to interact with the app.</p>')
 
+    @app.context_processor
+    def inject_globals():
+        import datetime
+        return { 'current_year': datetime.datetime.utcnow().year }
+
     return app
 
 

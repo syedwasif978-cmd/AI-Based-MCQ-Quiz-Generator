@@ -1,0 +1,98 @@
+<<<JSON>>>
+{
+  "questions": [
+    {
+      "id": 1,
+      "q": "Determine the derivative of the function \\(f(x) = x^2 \\sin(3x)\\) with respect to \\(x\\).",
+      "topic": "derivatives",
+      "options": [
+        "A) \\(2x \\sin(3x) + 3x^2 \\cos(3x)\\)",
+        "B) \\(2x \\sin(3x) - 3x^2 \\cos(3x)\\)",
+        "C) \\(2x \\cos(3x) + 3x^2 \\sin(3x)\\)",
+        "D) \\(2x \\cos(3x) - 3x^2 \\sin(3x)\\)"
+      ]
+    },
+    {
+      "id": 2,
+      "q": "Given the equation \\(x^3 + y^3 = 6xy\\), find \\(\\frac{dy}{dx}\\) at the point \\((3, 3)\\).",
+      "topic": "derivatives",
+      "options": [
+        "A) \\(-1\\)",
+        "B) \\(0\\)",
+        "C) \\(1\\)",
+        "D) \\(3\\)"
+      ]
+    },
+    {
+      "id": 3,
+      "q": "Evaluate the indefinite integral \\(\\int (e^{2x} + \\frac{1}{x} - \\sec^2(x)) \\, dx\\).",
+      "topic": "integration",
+      "options": [
+        "A) \\(\\frac{1}{2}e^{2x} + \\ln|x| - \\tan(x) + C\\)",
+        "B) \\(2e^{2x} + \\ln|x| - \\tan(x) + C\\)",
+        "C) \\(\\frac{1}{2}e^{2x} - \\ln|x| + \\tan(x) + C\\)",
+        "D) \\(e^{2x} + \\ln|x| - \\tan(x) + C\\)"
+      ]
+    },
+    {
+      "id": 4,
+      "q": "Calculate the definite integral \\(\\int_0^1 x \\sqrt{1-x^2} \\, dx\\).",
+      "topic": "integration",
+      "options": [
+        "A) \\(\\frac{1}{3}\\)",
+        "B) \\(\\frac{2}{3}\\)",
+        "C) \\(0\\)",
+        "D) \\(1\\)"
+      ]
+    },
+    {
+      "id": 5,
+      "q": "A spherical balloon is being inflated. Its volume is increasing at a rate of \\(10 \\, \\text{cm}^3/\\text{s}\\). At what rate is the radius increasing when the radius is \\(5 \\, \\text{cm}\\)? (The volume of a sphere is \\(V = \\frac{4}{3}\\pi r^3\\)).",
+      "topic": "derivatives",
+      "options": [
+        "A) \\(\\frac{1}{10\\pi} \\, \\text{cm/s}\\)",
+        "B) \\(\\frac{1}{20\\pi} \\, \\text{cm/s}\\)",
+        "C) \\(\\frac{1}{4\\pi} \\, \\text{cm/s}\\)",
+        "D) \\(\\frac{1}{50\\pi} \\, \\text{cm/s}\\)"
+      ]
+    },
+    {
+      "id": 6,
+      "q": "Determine the area of the region bounded by the curve \\(y = x^2 - 4x\\) and the x-axis.",
+      "topic": "integration",
+      "options": [
+        "A) \\(\\frac{32}{3}\\)",
+        "B) \\(\\frac{16}{3}\\)",
+        "C) \\(-\\frac{32}{3}\\)",
+        "D) \\(8\\)"
+      ]
+    }
+  ],
+  "answers": [
+    {
+      "id": 1,
+      "answer": "A"
+    },
+    {
+      "id": 2,
+      "answer": "A"
+    },
+    {
+      "id": 3,
+      "answer": "A"
+    },
+    {
+      "id": 4,
+      "answer": "A"
+    },
+    {
+      "id": 5,
+      "answer": "A"
+    },
+    {
+      "id": 6,
+      "answer": "A"
+    }
+  ]
+}
+<<<END_JSON>>>

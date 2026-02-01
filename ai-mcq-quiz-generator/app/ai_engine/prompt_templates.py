@@ -14,19 +14,24 @@ Constraints:
 - If the topic is technical (e.g., derivatives, integration), include a short problem or example that requires reasoning or computation
 - Do NOT include answers with questions
 
-Return JSON ONLY in this exact format (no extra commentary):
+CRITICAL: Return ONLY valid JSON and nothing else. To make parsing robust, wrap the exact JSON response between the markers <<<JSON>>> and <<<END_JSON>>> with no extra characters before or after. For example:
+
+<<<JSON>>>
 {{
   "questions": [
     {{"id": 1, "q": "Which of the following is the derivative of x^3 + 3x^2?", "topic": "derivatives", "options": ["3x^2 + 6x","3x^2 + 2x","x^2 + 6x","6x^2 + 3x"]}},
-    {{"id": 2, "q": "Evaluate the indefinite integral ∫ 2x dx", "topic": "integration", "options": ["x^2 + C","2x + C","x + C","ln|x| + C"]}},
-    ...
+    {{"id": 2, "q": "Evaluate the indefinite integral ∫ 2x dx", "topic": "integration", "options": ["x^2 + C","2x + C","x + C","ln|x| + C"]}}
   ],
   "answers": [
     {{"id":1, "answer":"A"}},
-    {{"id":2, "answer":"A"}},
-    ...
+    {{"id":2, "answer":"A"}}
   ]
 }}
+<<<END_JSON>>>
 
-If you fail to follow the format, respond with valid JSON only. Ensure questions are varied, substantive, and reference topics where appropriate.
+If you cannot provide the requested JSON exactly, respond with:
+
+{{"error":"UNABLE_TO_PROVIDE_JSON"}}
+
+Ensure questions are varied, substantive, and reference topics where appropriate.
 """

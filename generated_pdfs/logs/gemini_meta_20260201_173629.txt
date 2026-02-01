@@ -1,0 +1,27 @@
+response:
+GenerateContentResponse(
+    done=True,
+    iterator=None,
+    result=protos.GenerateContentResponse({
+      "candidates": [
+        {
+          "content": {
+            "parts": [
+              {
+                "text": "<<<JSON>>>\n{\n  \"questions\": [\n    {\n      \"id\": 1,\n      \"q\": \"Determine the derivative of the function \\(f(x) = x^2 \\sin(3x)\\) with respect to \\(x\\).\",\n      \"topic\": \"derivatives\",\n      \"options\": [\n        \"\\(2x"
+              }
+            ],
+            "role": "model"
+          },
+          "finish_reason": "MAX_TOKENS",
+          "index": 0
+        }
+      ],
+      "usage_metadata": {
+        "prompt_token_count": 432,
+        "candidates_token_count": 79,
+        "total_token_count": 2428
+      },
+      "model_version": "gemini-2.5-flash"
+    }),
+)

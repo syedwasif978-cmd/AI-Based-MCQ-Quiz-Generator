@@ -1,0 +1,9 @@
+<<<JSON>>>
+{
+  "questions": [
+    {
+      "id": 1,
+      "q": "Determine the derivative of the function \(f(x) = x^2 \sin(3x)\) with respect to \(x\).",
+      "topic": "derivatives",
+      "options": [
+        "\(2x

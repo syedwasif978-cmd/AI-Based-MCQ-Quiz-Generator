@@ -1,0 +1,83 @@
+<<<JSON>>>
+{
+  "questions": [
+    {
+      "id": 1,
+      "q": "Consider the sentence: 'She ______ for three hours, and she's still not finished.' Which tense best completes the sentence, emphasizing the duration of an ongoing action that started in the past and continues into the present?",
+      "topic": "tenses",
+      "options": [
+        "A) has been studying",
+        "B) studied",
+        "C) is studying",
+        "D) had studied"
+      ]
+    },
+    {
+      "id": 2,
+      "q": "In the sentence 'By the time the police arrived, the suspect ______ the building,' which tense correctly indicates an action completed before another past action?",
+      "topic": "tenses",
+      "options": [
+        "A) left",
+        "B) was leaving",
+        "C) had left",
+        "D) leaves"
+      ]
+    },
+    {
+      "id": 3,
+      "q": "Which of the following sentences correctly uses the future perfect tense to describe an action that will be completed by a specific point in the future?",
+      "topic": "tenses",
+      "options": [
+        "A) They will finish the project tomorrow.",
+        "B) By next Friday, they will have finished the project.",
+        "C) They are finishing the project by next Friday.",
+        "D) They will be finishing the project next Friday."
+      ]
+    },
+    {
+      "id": 4,
+      "q": "Identify the sentence that correctly employs the third conditional structure to express a hypothetical situation in the past and its hypothetical result.",
+      "topic": "tenses",
+      "options": [
+        "A) If he had studied harder, he would pass the exam.",
+        "B) If he studied harder, he would have passed the exam.",
+        "C) If he had studied harder, he would have passed the exam.",
+        "D) If he studies harder, he will pass the exam."
+      ]
+    },
+    {
+      "id": 5,
+      "q": "Analyze the following scenario: 'Before she finally secured the grant, Dr. Evans ______ for months to refine her research proposal.' Which tense most accurately conveys an ongoing action in the past that continued up to another point in the past?",
+      "topic": "tenses",
+      "options": [
+        "A) had been working",
+        "B) was working",
+        "C) worked",
+        "D) has been working"
+      ]
+    }
+  ],
+  "answers": [
+    {
+      "id": 1,
+      "answer": "A"
+    },
+    {
+      "id": 2,
+      "answer": "C"
+    },
+    {
+      "id": 3,
+      "answer": "B"
+    },
+    {
+      "id": 4,
+      "answer": "C"
+    },
+    {
+      "id": 5,
+      "answer": "A"
+    }
+  ]
+}
+<<<END_JSON>>>

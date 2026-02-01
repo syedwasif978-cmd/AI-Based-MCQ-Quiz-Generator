@@ -1,0 +1,27 @@
+response:
+GenerateContentResponse(
+    done=True,
+    iterator=None,
+    result=protos.GenerateContentResponse({
+      "candidates": [
+        {
+          "content": {
+            "parts": [
+              {
+                "text": "<<<JSON>>>\n{\n  \"questions\": [\n    {\n      \"id\": 1,\n      \"q\": \"Consider the sentence: 'She ______ for three hours, and she's still not finished.' Which tense best completes the sentence, emphasizing the duration of an ongoing action that started in the past and continues into the present?\",\n      \"topic\": \"tenses\",\n      \"options\": [\n        \"A) has been studying\",\n        \"B) studied\",\n        \"C) is studying\",\n        \"D) had studied\"\n      ]\n    },\n    {\n      \"id\": 2,\n      \"q\": \"In the sentence 'By the time the police arrived, the suspect ______ the building,' which tense correctly indicates an action completed before another past action?\",\n      \"topic\": \"tenses\",\n      \"options\": [\n        \"A) left\",\n        \"B) was leaving\",\n        \"C) had left\",\n        \"D) leaves\"\n      ]\n    },\n    {\n      \"id\": 3,\n      \"q\": \"Which of the following sentences correctly uses the future perfect tense to describe an action that will be completed by a specific point in the future?\",\n      \"topic\": \"tenses\",\n      \"options\": [\n        \"A) They will finish the project tomorrow.\",\n        \"B) By next Friday, they will have finished the project.\",\n        \"C) They are finishing the project by next Friday.\",\n        \"D) They will be finishing the project next Friday.\"\n      ]\n    },\n    {\n      \"id\": 4,\n      \"q\": \"Identify the sentence that correctly employs the third conditional structure to express a hypothetical situation in the past and its hypothetical result.\",\n      \"topic\": \"tenses\",\n      \"options\": [\n        \"A) If he had studied harder, he would pass the exam.\",\n        \"B) If he studied harder, he would have passed the exam.\",\n        \"C) If he had studied harder, he would have passed the exam.\",\n        \"D) If he studies harder, he will pass the exam.\"\n      ]\n    },\n    {\n      \"id\": 5,\n      \"q\": \"Analyze the following scenario: 'Before she finally secured the grant, Dr. Evans ______ for months to refine her research proposal.' Which tense most accurately conveys an ongoing action in the past that continued up to another point in the past?\",\n      \"topic\": \"tenses\",\n      \"options\": [\n        \"A) had been working\",\n        \"B) was working\",\n        \"C) worked\",\n        \"D) has been working\"\n      ]\n    }\n  ],\n  \"answers\": [\n    {\n      \"id\": 1,\n      \"answer\": \"A\"\n    },\n    {\n      \"id\": 2,\n      \"answer\": \"C\"\n    },\n    {\n      \"id\": 3,\n      \"answer\": \"B\"\n    },\n    {\n      \"id\": 4,\n      \"answer\": \"C\"\n    },\n    {\n      \"id\": 5,\n      \"answer\": \"A\"\n    }\n  ]\n}\n<<<END_JSON>>>"
+              }
+            ],
+            "role": "model"
+          },
+          "finish_reason": "STOP",
+          "index": 0
+        }
+      ],
+      "usage_metadata": {
+        "prompt_token_count": 431,
+        "candidates_token_count": 719,
+        "total_token_count": 2064
+      },
+      "model_version": "gemini-2.5-flash"
+    }),
+)

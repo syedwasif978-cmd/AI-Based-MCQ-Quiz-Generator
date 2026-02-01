@@ -32,13 +32,4 @@ document.addEventListener('DOMContentLoaded', function(){
 
   // small fade-in for content
   document.querySelectorAll('.card, .hero-card').forEach(el=>el.classList.add('fade-in'))
-
-  // sticky header shadow on scroll
-  const header = document.querySelector('.topbar');
-  const checkHeader = ()=>{
-    if(!header) return;
-    if(window.scrollY > 8) header.classList.add('scrolled'); else header.classList.remove('scrolled');
-  }
-  checkHeader();
-  window.addEventListener('scroll', checkHeader);
 })

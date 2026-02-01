@@ -1,0 +1,58 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>{% block title %}AI MCQ Quiz Generator{% endblock %}</title>
+
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&family=Merriweather:wght@300;400;700&display=swap" rel="stylesheet">
+
+    <!-- Theme stylesheet -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+
+    <!-- Icons (simple inline-friendly set) -->
+    <meta name="theme-color" content="#0b1020">
+
+    {% block head_extra %}{% endblock %}
+  </head>
+  <body class="theme-root">
+    <header class="topbar">
+      <div class="container topbar-inner">
+        <a class="brand" href="{{ url_for('index') }}">
+          <svg class="brand-logo" viewBox="0 0 48 48" width="36" height="36" aria-hidden="true">
+            <defs>
+              <linearGradient id="g" x1="0" x2="1">
+                <stop offset="0%" stop-color="#0b5f3b"/>
+                <stop offset="100%" stop-color="#7FC29D"/>
+              </linearGradient>
+            </defs>
+            <rect width="48" height="48" rx="8" fill="#F4F2EE" />
+            <path d="M12 32 L24 12 L36 32 Z" fill="url(#g)"/>
+          </svg>
+          <span class="brand-text">AI MCQ Generator</span>
+        </a>
+
+        <nav class="nav">
+          <a href="{{ url_for('index') }}" class="nav-link">Dashboard</a>
+          <a href="{{ url_for('quiz.generate') }}" class="nav-link">Generate</a>
+          <a href="{{ url_for('auth.login') }}" class="nav-link">Sign in</a>
+        </nav>
+      </div>
+    </header>
+
+    <main class="container main-content">
+      {% block content %}{% endblock %}
+    </main>
+
+    <footer class="site-footer">
+      <div class="container">
+        <div>© {{ current_year if current_year is defined else 2026 }} — AI MCQ Generator • For professors only</div>
+        <div class="footer-links">Made with ❤️ · <a href="#">Docs</a> · <a href="#">Support</a></div>
+      </div>
+    </footer>
+
+    <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+    {% block scripts %}{% endblock %}
+  </body>
+</html>

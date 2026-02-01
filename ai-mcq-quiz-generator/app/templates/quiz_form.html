@@ -1,16 +1,54 @@
-<!doctype html>
-<html>
-  <head><title>Generate Quiz</title></head>
-  <body>
-    <h1>Quiz Configuration</h1>
-    <form method="post" action="/quiz/generate">
-      Subject: <input name="subject" /><br />
-      Topics (comma separated): <input name="topics" placeholder="e.g., derivatives, integration" /><br />
-      Number of questions: <input name="num_questions" type="number" min="5" max="50" value="10" /><br />
-      Difficulty: <select name="difficulty"><option>Easy</option><option selected>Medium</option><option>Hard</option></select><br />
-      Time (minutes): <input name="time_limit" type="number" /><br />
-      <input type="hidden" name="professor_id" value="1" />
-      <button type="submit">Generate</button>
-    </form>
-  </body>
-</html>
+{% extends 'base.html' %}
+
+{% block title %}Generate Quiz - AI MCQ Generator{% endblock %}
+
+{% block content %}
+<div class="card">
+  <h3>Configure Quiz</h3>
+  <p class="small-note">Provide the subject and comma-separated topics to guide the generator.</p>
+  <form method="post" action="/quiz/generate">
+    <div class="form-row">
+      <div class="form-field">
+        <label for="subject">Subject</label>
+        <input id="subject" name="subject" type="text" required placeholder="e.g., Calculus" />
+      </div>
+      <div class="form-field">
+        <label for="topics">Topics</label>
+        <input id="topics" name="topics" type="text" placeholder="e.g., derivatives, integration" />
+      </div>
+    </div>
+
+    <div class="form-row" style="margin-top:12px">
+      <div class="form-field">
+        <label for="num_questions">Number of questions</label>
+        <input id="num_questions" name="num_questions" type="number" min="5" max="50" value="10" required />
+      </div>
+      <div class="form-field">
+        <label for="difficulty">Difficulty</label>
+        <select id="difficulty" name="difficulty">
+          <option>Easy</option>
+          <option selected>Medium</option>
+          <option>Hard</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="form-row" style="margin-top:12px">
+      <div class="form-field">
+        <label for="time_limit">Time (minutes) — optional</label>
+        <input id="time_limit" name="time_limit" type="number" min="1" placeholder="e.g., 60" />
+      </div>
+      <div class="form-field">
+        <label>&nbsp;</label>
+        <div class="small-note">Answer keys are kept secure and downloadable only for professors.</div>
+      </div>
+    </div>
+
+    <div class="form-actions">
+      <button class="btn" type="submit">Generate Quiz</button>
+      <button class="btn secondary" type="reset">Reset</button>
+    </div>
+    <input type="hidden" name="professor_id" value="1" />
+  </form>
+</div>
+{% endblock %}
