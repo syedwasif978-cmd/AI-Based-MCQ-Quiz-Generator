@@ -1,0 +1,27 @@
+response:
+GenerateContentResponse(
+    done=True,
+    iterator=None,
+    result=protos.GenerateContentResponse({
+      "candidates": [
+        {
+          "content": {
+            "parts": [
+              {
+                "text": "<<<JSON>>>\n{\n  \"questions\": [\n    {\n      \"id\": 1,\n      \"q\": \"Determine the derivative of the function f(x) = 4x^3 - 7x^2 + 2x - 5 with respect to x.\",\n      \"topic\": \"derivatives\",\n      \"options\": [\n        \"A) 12x^2 - 14x + 2\",\n        \"B) 12x^2 - 7x + 2\",\n        \"C) 4x^2 - 14x + 2\",\n        \"D) 12x^3 - 14x^2 + 2x\"\n      ]\n    },\n    {\n      \"id\": 2,\n      \"q\": \"Given the function g(x) = (x^2 + 3)(e^x), find g'(x).\",\n      \"topic\": \"derivatives\",\n      \"options\": [\n        \"A) 2xe^x\",\n        \"B) (x^2 + 2x + 3)e^x\",\n        \"C) (x^2 + 3)e^x + 2x\",\n        \"D) (2x + 3)e^x\"\n      ]\n    },\n    {\n      \"id\": 3,\n      \"q\": \"Calculate the derivative of h(x) = (sin(x)) / (x^2 + 1).\",\n      \"topic\": \"derivatives\",\n      \"options\": [\n        \"A) (cos(x)(x^2 + 1) - 2x sin(x)) / (x^2 + 1)^2\",\n        \"B) (sin(x)(x^2 + 1) - 2x cos(x)) / (x^2 + 1)^2\",\n        \"C) (cos(x)(x^2 + 1) + 2x sin(x)) / (x^2 + 1)^2\",\n        \"D) (2x sin(x) - cos(x)(x^2 + 1)) / (x^2 + 1)^2\"\n      ]\n    },\n    {\n      \"id\": 4,\n      \"q\": \"Find the derivative of k(x) = cos(4x^2 - 3x).\",\n      \"topic\": \"derivatives\",\n      \"options\": [\n        \"A) -sin(4x^2 - 3x)\",\n        \"B) (8x - 3)sin(4x^2 - 3x)\",\n        \"C) -(8x - 3)sin(4x^2 - 3x)\",\n        \"D) sin(4x^2 - 3x)\"\n      ]\n    },\n    {\n      \"id\": 5,\n      \"q\": \"Determine the derivative of m(x) = ln(tan(x)).\",\n      \"topic\": \"derivatives\",\n      \"options\": [\n        \"A) sec^2(x) / tan(x)\",\n        \"B) cot(x) sec^2(x)\",\n        \"C) 1 / tan(x)\",\n        \"D) -cot(x) sec^2(x)\"\n      ]\n    },\n    {\n      \"id\": 6,\n      \"q\": \"Given the equation x^2y + y^3 = 10, find dy/dx using implicit differentiation.\",\n      \"topic\": \"derivatives\",\n      \"options\": [\n        \"A) -2xy / (x^2 + 3y^2)\",\n        \"B) (2xy + 3y^2) / x^2\",\n        \"C) -2xy / (x^2 + y^2)\",\n        \"D) (2xy + 3y^2) / (x^2 + 3y^2)\"\n      ]\n    },\n    {\n      \"id\": 7,\n      \"q\": \"If f(x) = x^4 - 5x^3 + 2x - 1, calculate the second derivative, f''(x).\",\n      \"topic\": \"derivatives\",\n      \"options\": [\n        \"A) 4x^3 - 15x^2 + 2\",\n        \"B) 12x^2 - 30x\",\n        \"C) 12x^2 - 15x\",\n        \"D) 4x^3 - 30x\"\n      ]\n    },\n    {\n      \"id\": 8,\n      \"q\": \"Find the derivative of p(x) = arctan(2x).\",\n      \"topic\": \"derivatives\",\n      \"options\": [\n        \"A) 1 / (1 + 4x^2)\",\n        \"B) 2 / (1 + 4x^2)\",\n        \"C) 2 / (1 + x^2)\",\n        \"D) 1 / (1 + (2x)^2)\"\n      ]\n    },\n    {\n      \"id\": 9,\n      \"q\": \"A spherical balloon is being inflated. If its volume is increasing at a rate of 10 cm^3/s, how fast is its radius increasing when the radius is 5 cm? (Volume of a sphere V = (4/3)\u03c0r^3)\",\n      \"topic\": \"derivatives\",\n      \"options\": [\n        \"A) 1 / (10\u03c0) cm/s\",\n        \"B) 1 / (4\u03c0) cm/s\",\n        \"C) 1 / (20\u03c0) cm/s\",\n        \"D) 1 / (50\u03c0) cm/s\"\n      ]\n    },\n    {\n      \"id\": 10,\n      \"q\": \"For a function f(x) that is differentiable at x=a, which of the following statements is true regarding the tangent line to the graph of f(x) at x=a?\",\n      \"topic\": \"derivatives\",\n      \"options\": [\n        \"A) The slope of the tangent line is given by f(a).\",\n        \"B) The equation of the tangent line is y - f(a) = f'(a)(x - a).\",\n        \"C) The tangent line always intersects the x-axis at x=a.\",\n        \"D) The tangent line is always horizontal if f'(a) exists.\"\n      ]\n    }\n  ],\n  \"answers\": [\n    {\n      \"id\": 1,\n      \"answer\": \"A\"\n    },\n    {\n      \"id\": 2,\n      \"answer\": \"B\"\n    },\n    {\n      \"id\": 3,\n      \"answer\": \"A\"\n    },\n    {\n      \"id\": 4,\n      \"answer\": \"C\"\n    },\n    {\n      \"id\": 5,\n      \"answer\": \"A\"\n    },\n    {\n      \"id\": 6,\n      \"answer\": \"A\"\n    },\n    {\n      \"id\": 7,\n      \"answer\": \"B\"\n    },\n    {\n      \"id\": 8,\n      \"answer\": \"B\"\n    },\n    {\n      \"id\": 9,\n      \"answer\": \"A\"\n    },\n    {\n      \"id\": 10,\n      \"answer\": \"B\"\n    }\n  ]\n}\n<<<END_JSON>>>"
+              }
+            ],
+            "role": "model"
+          },
+          "finish_reason": "STOP",
+          "index": 0
+        }
+      ],
+      "usage_metadata": {
+        "prompt_token_count": 431,
+        "candidates_token_count": 1726,
+        "total_token_count": 4253
+      },
+      "model_version": "gemini-2.5-flash"
+    }),
+)

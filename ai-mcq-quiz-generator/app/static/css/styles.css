@@ -1,6 +1,6 @@
 /* Theme: Cream + Dark Green accent (aesthetic, professional) */
 :root{
-  --bg:#F4F2EE; /* slightly darker cream background */
+  --bg:#ECE9E2; /* slightly darker cream background (less glaring) */
   --card:#FFFFFF; /* clean card background */
   --muted:#6b6f68; /* subtle grey-green */
   --accent:#0b5f3b; /* deep, aesthetic dark green */

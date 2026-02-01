@@ -25,7 +25,11 @@ def create_and_generate_quiz(data):
     answers_pdf = generate_answers_pdf(generated['answers'], answers_rel, subject)
 
     quiz_id = len(QUIZ_STORE) + 1
-    QUIZ_STORE[quiz_id] = {'questions': questions_pdf, 'answers': answers_pdf, 'meta': data}
+    # enrich meta
+    meta = dict(data)
+    meta['created_at'] = datetime.utcnow().strftime('%Y-%m-%d %H:%M UTC')
+    meta['num_questions'] = int(num)
+    QUIZ_STORE[quiz_id] = {'questions': questions_pdf, 'answers': answers_pdf, 'meta': meta}
     # Log created files for debugging
     print(f"[quiz_service] Created quiz {quiz_id}: questions={questions_pdf}, answers={answers_pdf}")
     return {'id': quiz_id}

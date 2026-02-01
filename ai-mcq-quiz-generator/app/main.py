@@ -41,8 +41,31 @@ def create_app():
     def index():
         try:
             from flask import render_template
-            return render_template('dashboard.html')
-        except Exception:
+            # Provide recent quizzes and basic stats for dashboard
+            try:
+                from .services.quiz_service import QUIZ_STORE
+                quizzes = []
+                for qid, v in QUIZ_STORE.items():
+                    meta = v.get('meta', {})
+                    quizzes.append({
+                        'id': qid,
+                        'title': f"{meta.get('subject','Untitled')} ({meta.get('difficulty','')})",
+                        'created': meta.get('created_at', '') or 'N/A',
+                        'num': meta.get('num_questions', meta.get('num', 0))
+                    })
+                quizzes = sorted(quizzes, key=lambda x: x['id'], reverse=True)[:6]
+                total = len(QUIZ_STORE)
+                last = quizzes[0]['title'] if quizzes else '—'
+                avg_diff = ''
+            except Exception:
+                quizzes = []
+                total = 0
+                last = '—'
+                avg_diff = ''
+            stats = {'total': total, 'last': last, 'avg_difficulty': avg_diff}
+            return render_template('dashboard.html', recent_quizzes=quizzes, stats=stats)
+        except Exception as e:
+            print(f"[main] Template render error: {e}")
             return ('<h1>AI MCQ Quiz Generator</h1><p>Use the API endpoints to interact with the app.</p>')
 
     @app.context_processor
