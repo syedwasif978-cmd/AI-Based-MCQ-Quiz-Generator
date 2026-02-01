@@ -1,0 +1,14 @@
+<!doctype html>
+<html>
+  <head><title>Generate Quiz</title></head>
+  <body>
+    <h1>Quiz Configuration</h1>
+    <form method="post" action="/quiz/generate">
+      Subject: <input name="subject" /><br />
+      Number of questions: <input name="num_questions" type="number" min="5" max="50" value="10" /><br />
+      Difficulty: <select name="difficulty"><option>Easy</option><option selected>Medium</option><option>Hard</option></select><br />
+      Time (minutes): <input name="time_limit" type="number" /><br />
+      <button type="submit">Generate</button>
+    </form>
+  </body>
+</html>
