@@ -1,0 +1,19 @@
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.env
+.env.*
+venv/
+*.sqlite3
+
+# Generated PDFs
+generated_pdfs/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# IDE
+.vscode/
