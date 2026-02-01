@@ -1,4 +1,3 @@
-def register():
 from flask import Blueprint, request, jsonify, render_template
 from ..controllers.auth_controller import register_user, login_user
 
@@ -14,7 +13,6 @@ def register():
     return jsonify({'user_id': user['id']}), 201
 
 
-def login():
 @auth_bp.route('/login', methods=['GET','POST'])
 def login():
     if request.method == 'GET':

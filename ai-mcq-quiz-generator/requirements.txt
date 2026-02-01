@@ -4,7 +4,8 @@ python-dotenv==1.0.0
 # Updated ReportLab to a compatible version for Python 3.11 on Windows
 reportlab==4.4.9
 cryptography==41.0.4
-openai==1.9.0
+# Google Generative AI (Gemini) for MCQ generation
+google-generativeai>=0.3.0
 pytest==7.4.0
 Flask-Login==0.6.3
 oracledb==1.0.0

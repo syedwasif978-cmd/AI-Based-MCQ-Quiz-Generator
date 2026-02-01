@@ -1,6 +1,18 @@
 from flask import Flask
-from .config import Config
-from .database.db import init_db
+import sys
+import os
+
+try:
+    # Normal package import when run via run.py or as a package
+    from .config import Config
+    from .database.db import init_db
+except Exception:
+    # Support running this file directly: add project root to sys.path and import package modules
+    project_root = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
+    if project_root not in sys.path:
+        sys.path.insert(0, project_root)
+    from app.config import Config
+    from app.database.db import init_db
 
 
 def create_app():
@@ -10,10 +22,15 @@ def create_app():
     # initialize DB (SQLAlchemy) and others
     init_db(app)
 
-    # register blueprints
-    from .routes.auth_routes import auth_bp
-    from .routes.quiz_routes import quiz_bp
-    from .routes.pdf_routes import pdf_bp
+    # register blueprints (support package or direct script import)
+    try:
+        from .routes.auth_routes import auth_bp
+        from .routes.quiz_routes import quiz_bp
+        from .routes.pdf_routes import pdf_bp
+    except Exception:
+        from app.routes.auth_routes import auth_bp
+        from app.routes.quiz_routes import quiz_bp
+        from app.routes.pdf_routes import pdf_bp
 
     app.register_blueprint(auth_bp)
     app.register_blueprint(quiz_bp)

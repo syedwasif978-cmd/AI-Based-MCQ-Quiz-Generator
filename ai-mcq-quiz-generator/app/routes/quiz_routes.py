@@ -18,6 +18,7 @@ def generate():
         # form submission
         data = {
             'subject': request.form.get('subject'),
+            'topics': request.form.get('topics'),
             'num_questions': request.form.get('num_questions'),
             'difficulty': request.form.get('difficulty'),
             'professor_id': request.form.get('professor_id', 1),
@@ -26,8 +27,8 @@ def generate():
 
     quiz = generate_quiz(data)
 
-    # If form submission, redirect to question PDF
+    # If form submission, render preview page with download links
     if not request.is_json:
-        return redirect(url_for('pdf.questions_pdf', quiz_id=quiz['id']))
+        return render_template('quiz_preview.html', quiz_id=quiz['id'])
 
     return jsonify({'quiz_id': quiz['id']}), 201

@@ -1,5 +1,6 @@
-from flask import Blueprint, send_file, abort
+from flask import Blueprint, send_file, abort, jsonify
 from ..controllers.pdf_controller import get_question_pdf_path, get_answer_pdf_path
+import os
 
 pdf_bp = Blueprint('pdf', __name__, url_prefix='/pdf')
 
@@ -9,6 +10,8 @@ def questions_pdf(quiz_id):
     path = get_question_pdf_path(quiz_id)
     if not path:
         abort(404)
+    if not os.path.exists(path):
+        return jsonify({'error': 'Question PDF not found', 'path': path}), 404
     return send_file(path, as_attachment=True)
 
 
@@ -17,4 +20,6 @@ def answers_pdf(quiz_id):
     path = get_answer_pdf_path(quiz_id)
     if not path:
         abort(404)
+    if not os.path.exists(path):
+        return jsonify({'error': 'Answer PDF not found', 'path': path}), 404
     return send_file(path, as_attachment=True)

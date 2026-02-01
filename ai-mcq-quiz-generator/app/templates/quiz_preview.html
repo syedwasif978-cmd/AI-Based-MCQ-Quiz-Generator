@@ -2,7 +2,11 @@
 <html>
   <head><title>Quiz Preview</title></head>
   <body>
-    <h1>Preview</h1>
-    <div id="preview"></div>
+    <h1>Quiz Generated</h1>
+    <p>Your quiz was generated successfully. Use the links below to download the files.</p>
+    <ul>
+      <li><a href="/pdf/questions/{{ quiz_id }}">Download Question Paper (PDF)</a></li>
+      <li><a href="/pdf/answers/{{ quiz_id }}">Download Answer Key (PDF)</a></li>
+    </ul>
   </body>
 </html>

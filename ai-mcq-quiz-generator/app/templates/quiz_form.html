@@ -5,9 +5,11 @@
     <h1>Quiz Configuration</h1>
     <form method="post" action="/quiz/generate">
       Subject: <input name="subject" /><br />
+      Topics (comma separated): <input name="topics" placeholder="e.g., derivatives, integration" /><br />
       Number of questions: <input name="num_questions" type="number" min="5" max="50" value="10" /><br />
       Difficulty: <select name="difficulty"><option>Easy</option><option selected>Medium</option><option>Hard</option></select><br />
       Time (minutes): <input name="time_limit" type="number" /><br />
+      <input type="hidden" name="professor_id" value="1" />
       <button type="submit">Generate</button>
     </form>
   </body>
