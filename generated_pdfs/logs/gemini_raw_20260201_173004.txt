@@ -1,7 +1,0 @@
-<<<JSON>>>
-{
-  "questions": [
-    {
-      "id": 1,
-      "q": "Determine the first derivative of the function f(x) = (3x^2 - 5)^4.",
-      "topic": "

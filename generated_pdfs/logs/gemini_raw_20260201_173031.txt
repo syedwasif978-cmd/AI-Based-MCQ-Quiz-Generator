@@ -1,7 +1,0 @@
-<<<JSON>>>
-{
-  "questions": [
-    {
-      "id": 1,
-      "q": "Determine the derivative of the function `f(x) = sin(x^3 - 2x)` with respect to `x`.",
-      
