@@ -3,7 +3,7 @@ from ..database.db import Base
 import datetime
 
 class Quiz(Base):
-    __tablename__ = 'quizzes'
+    __tablename__ = 'user_quizzes'
     id = Column(Integer, primary_key=True)
     user_id = Column(Integer, nullable=False)
     subject = Column(String(100))

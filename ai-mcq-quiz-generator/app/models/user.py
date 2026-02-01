@@ -2,7 +2,7 @@ from sqlalchemy import Column, Integer, String
 from ..database.db import Base
 
 class User(Base):
-    __tablename__ = 'users'
+    __tablename__ = 'professors'
     id = Column(Integer, primary_key=True)
     full_name = Column(String(255), nullable=False)
     email = Column(String(255), nullable=False, unique=True)
